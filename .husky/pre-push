@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Перед пушем: типы и тесты
+bun run typecheck
+bun run test

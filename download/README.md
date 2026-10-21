@@ -1,1 +1,3 @@
-Here are all the generated files.
+# Generated files
+
+Здесь собираются сгенерированные файлы шаблона.

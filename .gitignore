@@ -1,54 +1,69 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+# Dependencies
+node_modules/
 
-# dependencies
-node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
+# Build output
+dist/
+build/
+out/
+.next/
+.nuxt/
+.svelte-kit/
+.astro/
+.output/
+.vite/
+.cache/
 
-# testing
-/coverage
+# Test coverage
+coverage/
 
-# next.js
-/.next/
-/out/
+# Environment variables
+.env
+.env.local
+.env.*.local
 
-# production
-/build
+# Husky
+.husky/_/
 
-# misc
+# React Buddy
+/dev/
+
+# IDE (WebStorm / IntelliJ)
+.idea/*
+!.idea/codeStyles/
+!.idea/jsLinters/
+!.idea/inspectionProfiles/
+!.idea/liveTemplates/
+!.idea/fileTemplates/
+!.idea/dictionaries/
+!.idea/scopes/
+!.idea/jsonCatalog.xml
+!.idea/jsonSchemas.xml
+!.idea/prettier.xml
+!.idea/vcs.xml
+!.idea/modules.xml
+!.idea/*.iml
+
+# OpenCode
+.agents/
+
+# OS files
 .DS_Store
-*.pem
+Thumbs.db
 
-# debug
+# Logs
+*.log
 npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+dev.log
+dev.out.log
+server.log
 
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-
-# typescript
+# TypeScript build info
 *.tsbuildinfo
 next-env.d.ts
+
+# Local agent/tooling folders
 local-*
 .claude
 .z-ai-config
-*.log
-dev.log
-dev.out.log
-test
-prompt
-
-server.log
-# Skills directory
 /skills/
+prompt
