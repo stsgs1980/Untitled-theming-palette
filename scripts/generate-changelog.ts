@@ -35,13 +35,14 @@ try {
   // match the actual work of this repository.
   execSync(`npx conventional-changelog -p "${PRESET}" -i ${CHANGELOG} -o ${DRAFT}`, { stdio: "inherit" });
 
-  // Convert asterisk to dash for consistency with prettier, and drop the marker of the
-  // previous revision: the marker is added back below, so keeping both would make every
-  // run change the file.
-  const generated = readFileSync(DRAFT, "utf8")
+  // Convert asterisk to dash for consistency with prettier. The marker is dropped from
+  // the body and added back at the top: the generator joins the new release and the
+  // previous entries, so the marker can end up in the middle of the file.
+  const body = readFileSync(DRAFT, "utf8")
     .replace(/^\* /gm, "- ")
-    .replace(/^<!-- markdownlint-disable -->\s*/, "");
-  writeFileSync(DRAFT, `${MARKDOWNLINT_DISABLE}\n${generated}`);
+    .replace(/<!-- markdownlint-disable -->/g, "")
+    .trim();
+  writeFileSync(DRAFT, `${MARKDOWNLINT_DISABLE}\n\n${body}\n`);
 
   // The draft has no known extension, so the prettier parser is explicit.
   execSync(`npx prettier --write --parser markdown ${DRAFT}`, { stdio: "inherit" });

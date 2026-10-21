@@ -18,6 +18,9 @@ updates:
       # ESLint 10 is blocked by eslint-plugin-react and eslint-plugin-jsx-a11y.
       - dependency-name: eslint
         update-types: ["version-update:semver-major"]
+      # @eslint/js 10 requires ESLint 10 as a peer dependency.
+      - dependency-name: "@eslint/js"
+        update-types: ["version-update:semver-major"]
       # TypeScript 6+ is blocked by typescript-eslint.
       - dependency-name: typescript
         update-types: ["version-update:semver-major"]
