@@ -43,8 +43,10 @@ coverage/
 !.idea/modules.xml
 !.idea/*.iml
 
-# OpenCode
+# OpenCode and other local agents
 .agents/
+.claude/
+.local/
 
 # OS files
 .DS_Store
@@ -60,10 +62,3 @@ server.log
 # TypeScript build info
 *.tsbuildinfo
 next-env.d.ts
-
-# Local agent/tooling folders
-local-*
-.claude
-.z-ai-config
-/skills/
-prompt

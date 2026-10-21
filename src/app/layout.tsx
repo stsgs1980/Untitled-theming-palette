@@ -19,9 +19,6 @@ export const metadata: Metadata = {
   description:
     "Все палитры для npx untitledui@latest init --color <name>: brand и 22 встроенные палитры Tailwind, оттенки 50–950 с HEX-кодами и готовыми CLI-командами.",
   keywords: ["Untitled UI", "Untitled UI React", "theming", "brand color", "Tailwind CSS", "палитры"],
-  icons: {
-    icon: "https://z-cdn.chatglm.cn/z-ai/static/logo.svg",
-  },
   openGraph: {
     title: "Untitled UI React — Вся палитра для init --color",
     description: "23 палитры × 11 оттенков: brand и встроенные палитры Tailwind для флага --color.",

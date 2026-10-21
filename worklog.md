@@ -146,3 +146,33 @@ Stage Summary:
   конфигурация сборки упрощена до стандартной схемы next build и next start.
 - Шаблон webstorm-config применяется без единого исключения: лимит 250 строк действует для всех файлов,
   включая компоненты shadcn/ui.
+
+---
+
+Task ID: 5
+Agent: OpenCode
+Task: Ревизия остатков песочницы и её агента, приведение public/ и служебных скриптов в порядок.
+
+Work Log:
+
+- Проверен весь репозиторий на остатки песочницы: .zscripts/, Caddyfile, download/, mini-services/,
+  examples/, prisma/, db/, .env, tailwind.config.ts, scripts/copy-standalone.ts удалены ранее (a616d27);
+  зависимости z-ai-web-dev-sdk, prisma, next-auth, next-intl вычищены.
+- Найдено и устранено: в metadata layout.tsx favicon подключался с внешнего CDN песочничного агента
+  (`https://z-cdn.chatglm.cn/z-ai/static/logo.svg`). Вместо него создана собственная иконка src/app/icon.svg —
+  палитра в фирменном цвете #7F56D9, собранная из той же иконки lucide, что используется в интерфейсе.
+  Next подставляет ее автоматически через link rel="icon" с хешем файла.
+- public/logo.svg (логотип Z.ai из скаффолда) удален - он нигде не использовался; public/robots.txt
+  оставлен: это стандартный файл для индексации публичного сайта.
+- .gitignore: убраны ignore-правила песочничного агента (.z-ai-config, /skills/, prompt, local-*),
+  вместо них оставлены .agents/, .claude/, .local/.
+- Разобрана структура служебных файлов: scripts/ - исполняемые инструменты (check-file-length,
+  check-docs, generate-changelog, changelog-preset), tests/ - тесты этих инструментов, которые гоняет Vitest
+  вместе с тестами приложения из src/.
+- Проверки: lint, typecheck, lint:css, lint:md, format:check, test, check:file-length, check:docs,
+  build - все exit 0; npm start - страница 200, favicon отдается 200, ссылок на chatglm/z-ai в HTML нет.
+
+Stage Summary:
+
+- Внешних зависимостей на инфраструктуру песочницы не осталось: favicon стал локальным.
+- public/ теперь содержит только robots.txt; собственный favicon лежит в src/app/icon.svg по конвенции Next.js.
