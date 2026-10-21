@@ -31,6 +31,20 @@ jobs:
       - run: npm run lint:md
       - run: npm run format:check
 
+  audit:
+    # Production dependency tree must stay clean. Dev-only advisories without an
+    # upstream fix are documented in SECURITY.md and tracked by Dependabot.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm audit --omit=dev --audit-level=high
+
   floor:
     # Minimum from engines.node: proves install and toolchain on the floor.
     runs-on: ubuntu-latest

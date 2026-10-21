@@ -3,7 +3,9 @@ updates:
   - package-ecosystem: npm
     directory: /
     schedule:
-      interval: monthly
+      # Weekly: the unfixed braces advisory (GHSA-vfj7-8cjw-p6xm) needs a fast
+      # pickup as soon as an upstream patch is released.
+      interval: weekly
     open-pull-requests-limit: 3
     groups:
       # Minor and patch updates in one PR; majors stay separate.
