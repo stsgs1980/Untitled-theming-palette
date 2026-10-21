@@ -4,6 +4,7 @@ import { useCallback, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 import {
   Check,
+  ChevronDown,
   Copy,
   FileCode2,
   Moon,
@@ -15,7 +16,6 @@ import {
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -129,6 +129,61 @@ function K({ children }: { children: ReactNode }) {
     <code className="rounded bg-muted px-1 py-0.5 font-mono text-[0.85em] text-foreground">
       {children}
     </code>
+  );
+}
+
+/**
+ * SSR-стабильный элемент FAQ без useId: Radix Accordion генерирует id через
+ * React useId, и в dev-режиме (стриминг + HMR-гонки Turbopack) id сервера и
+ * клиента могут разойтись, вызывая hydration-ошибку. Статические id полностью
+ * детерминированы, сохраняют доступность (aria-expanded/aria-controls/region)
+ * и визуально повторяют shadcn Accordion.
+ */
+function FaqItem({
+  question,
+  answer,
+  index,
+}: {
+  question: string;
+  answer: ReactNode;
+  index: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const triggerId = `faq-trigger-${index}`;
+  const contentId = `faq-content-${index}`;
+
+  return (
+    <div className="border-b last:border-b-0">
+      <h3 className="flex">
+        <button
+          type="button"
+          id={triggerId}
+          aria-controls={contentId}
+          aria-expanded={open}
+          onClick={() => setOpen((v) => !v)}
+          className="focus-visible:border-ring focus-visible:ring-ring/50 flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:ring-[3px] sm:text-base"
+        >
+          {question}
+          <ChevronDown
+            aria-hidden="true"
+            className={cn(
+              "pointer-events-none size-4 shrink-0 translate-y-0.5 text-muted-foreground transition-transform duration-200",
+              open && "rotate-180",
+            )}
+          />
+        </button>
+      </h3>
+      {open && (
+        <div
+          id={contentId}
+          role="region"
+          aria-labelledby={triggerId}
+          className="animate-in fade-in-0 slide-in-from-top-1 pb-4 text-sm leading-relaxed text-muted-foreground"
+        >
+          {answer}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -504,18 +559,11 @@ export function PaletteShowcase() {
         <section id="faq" className="scroll-mt-16 border-t">
           <div className="mx-auto max-w-3xl px-4 py-12 sm:px-6 sm:py-16">
             <h2 className="text-center text-2xl font-semibold tracking-tight">Частые вопросы</h2>
-            <Accordion type="single" collapsible className="mt-6">
+            <div className="mt-6">
               {FAQS.map((f, i) => (
-                <AccordionItem key={f.q} value={`faq-${i}`}>
-                  <AccordionTrigger className="text-left text-sm sm:text-base">
-                    {f.q}
-                  </AccordionTrigger>
-                  <AccordionContent className="text-sm leading-relaxed text-muted-foreground">
-                    {f.a}
-                  </AccordionContent>
-                </AccordionItem>
+                <FaqItem key={f.q} question={f.q} answer={f.a} index={i} />
               ))}
-            </Accordion>
+            </div>
           </div>
         </section>
       </main>
