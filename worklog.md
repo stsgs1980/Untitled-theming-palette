@@ -68,3 +68,45 @@ Stage Summary:
   сервер/клиент невозможно в принципе.
 - Доступность и внешний вид FAQ сохранены; SSR-контент остаётся в HTML (без client-only гейтов).
 - Артефакт: обновлён src/components/palette-showcase.tsx (FaqItem вместо Radix Accordion).
+
+---
+
+Task ID: 3
+Agent: OpenCode
+Task: Адаптировать проект под требования шаблона webstorm-config (линтеры, Prettier, Stylelint, markdownlint,
+TypeScript, Husky, Vitest, анти-монолит, AI Rules, документация, CI).
+
+Work Log:
+
+- Изучен шаблон stsgs1980/webstorm-config: 30+ конфигов, 3 скрипта проверки, хуки Husky, CI и чек-лист миграции
+  (docs/getting-started.md, раздел «Migrating existing projects»). Проверен базовый линт самого шаблона — exit 0.
+- Решения владельца: вендорные компоненты shadcn/ui (src/components/ui/**) исключены из проверки длины файла.
+  Пакетный менеджер остаётся Bun; CI переведён на oven-sh/setup-bun; ESLint-конфиг шаблона применён как
+  eslint.config.js (проект переведён на "type": "module").
+- Конфиги: добавлены .editorconfig, .prettierrc, .prettierignore, .stylelintrc.json, .markdownlint.json,
+  .gitattributes, .npmrc, .nvmrc, tsconfig.base.json, vitest.config.ts, eslint-parsers/, eslint-processors/,
+  eslint-rules/, scripts/check-file-length.ts, scripts/check-docs.ts, scripts/generate-changelog.ts.
+- ESLint: flat-конфиг шаблона + @next/eslint-plugin-next (recommended и core-web-vitals); ignores для
+  next-env.d.ts, examples/** и src/components/ui/**; для scripts/** отключён no-console.
+- package.json: имя untitled-theming-palette, engines node >=22.22.2, commitlint, lint-staged, 12 скриптов
+  шаблона, devDependencies шаблона, prepare: husky.
+- Анти-монолит: palette-showcase.tsx (569 строк) разбит на 8 модулей в src/components/showcase/ с хуками
+  use-palette-filter и use-copy-to-clipboard; palettes.ts (460 строк) разбит на src/lib/palettes/ (types, brand,
+  warm, cool, neutral, order, constants, cli, index) с сохранением канонического порядка вывода.
+- Требования к коду: JSDoc и явные типы возврата для публичного API, устранён конфликт имён Palette
+  (иконка lucide-react и тип палитры), ссылка логотипа переведена на next/link.
+- Тесты: Vitest с алиасом @ -> src, 10 тестов палитр в src/lib/palettes/palettes.test.ts плюс 6 наборов
+  шаблонных тестов в tests/ — 56 тестов, все зелёные.
+- Документация: README.md по README.template.md (Overview, Features, Tech Stack, Scripts, Architecture),
+  docs/ шаблона, CHANGELOG.md сгенерирован, .aiassistant/rules/AI Rules.md с исключением вендорных файлов,
+  .idea/ (codeStyles, inspectionProfiles, liveTemplates, fileTemplates, dictionaries, scopes).
+- Проверки: lint, typecheck, lint:css, lint:md, format:check, test, check:file-length, check:docs — все exit 0;
+  bun run build — exit 0 (standalone + static + public); bun run start — / = 200, CSS = 200, /api = 200;
+  .zscripts/dev.sh под Git Bash — install, db:push, dev-сервер, health check passed.
+
+Stage Summary:
+
+- Проект приведён к требованиям шаблона: полный набор проверок CI проходит локально, хуки Husky и commitlint
+  работают (коммит 064e203), приложение собирается и запускается.
+- Ключевые отклонения от шаблона зафиксированы в docs/superpowers/plans/2026-10-21-webstorm-config-adaptation.md:
+  Bun вместо npm, исключение src/components/ui/\*\* из лимита 250 строк, next/link вместо ссылки на главную.
