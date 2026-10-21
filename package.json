@@ -6,6 +6,14 @@
   "description": "Шоукейс всей палитры Untitled UI React для CLI-флага init --color",
   "author": "stsgs1980",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stsgs1980/Untitled-theming-palette.git"
+  },
+  "bugs": {
+    "url": "https://github.com/stsgs1980/Untitled-theming-palette/issues"
+  },
+  "homepage": "https://github.com/stsgs1980/Untitled-theming-palette#readme",
   "engines": {
     "node": ">=22.22.2",
     "npm": ">=10.9.0"

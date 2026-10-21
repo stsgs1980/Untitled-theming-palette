@@ -60,8 +60,8 @@ Pre-commit останавливается на первой ошибке: сна
 ### Installation
 
 ```bash
-git clone <repository-url>
-cd "Untitled Theming pallete"
+git clone https://github.com/stsgs1980/Untitled-theming-palette.git
+cd Untitled-theming-palette
 npm install
 ```
 
@@ -136,5 +136,5 @@ JSDoc для публичного API, `const`/`let`. Лимит файла — 
 
 MIT
 
-[ci-badge]: https://github.com/stsgs1980/untitled-theming-palette/actions/workflows/ci.yml/badge.svg
-[ci-workflow]: https://github.com/stsgs1980/untitled-theming-palette/actions/workflows/ci.yml
+[ci-badge]: https://github.com/stsgs1980/Untitled-theming-palette/actions/workflows/ci.yml/badge.svg
+[ci-workflow]: https://github.com/stsgs1980/Untitled-theming-palette/actions/workflows/ci.yml
