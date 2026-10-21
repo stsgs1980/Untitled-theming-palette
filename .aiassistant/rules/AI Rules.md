@@ -32,8 +32,6 @@ Before any action, classify the user's request:
 - Max file length is 250 lines. If exceeded, split into modules (pre-commit checks
   staged files via `node scripts/check-file-length.ts`; CI runs `npm run check:file-length`).
   Test files (`*.test.*`, `*.spec.*`, files under `tests/` and `__tests__/`) are exempt.
-  Vendored components under `src/components/ui/**` (shadcn/ui) are exempt as well: they are
-  upstream code kept in sync with the library, so splitting them here only creates conflicts.
 - JSDoc required for public API (exported functions, methods, React components).
   In TS, `@param`/`@returns` are optional (explicit types are the source of truth);
   in plain JS files, a JSDoc block must include them.

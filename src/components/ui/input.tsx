@@ -2,7 +2,12 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Input({ className, type, ...props }: React.ComponentProps<"input">) {
+/**
+ * Текстовое поле ввода.
+ * @param props - свойства input, включая тип и класс
+ * @returns элемент поля ввода
+ */
+function Input({ className, type, ...props }: React.ComponentProps<"input">): React.ReactElement {
   return (
     <input
       type={type}

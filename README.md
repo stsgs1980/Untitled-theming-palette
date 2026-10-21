@@ -42,72 +42,63 @@
 - **Language**: TypeScript (strict)
 - **Framework**: Next.js 16 (App Router, Turbopack), React 19
 - **Styling**: Tailwind CSS 4 (CSS-first конфигурация, `@theme inline`)
-- **UI**: shadcn/ui, Radix UI, lucide-react, sonner, next-themes
+- **UI**: shadcn/ui (badge, button, input, sonner), Radix Slot, lucide-react, next-themes
 - **Linting**: ESLint (flat config шаблона), Stylelint, markdownlint, Prettier
 - **Testing**: Vitest
 - **Hooks**: Husky, lint-staged, Commitlint
-- **Data**: Prisma + SQLite (схема `User`/`Post`, страница использует только статику)
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js >= 22.22.2 (в CI и локально — 24.15.0 из `.nvmrc`)
-- Bun >= 1.3 (менеджер пакетов и запуск скриптов)
+- npm >= 10.9.0
 
 Pre-commit останавливается на первой ошибке: сначала `lint-staged`, затем проверка длины файлов.
-Перед пушем pre-push дополнительно прогоняет `bun run typecheck` и `bun run test`.
+Перед пушем pre-push дополнительно прогоняет `npm run typecheck` и `npm test`.
 
 ### Installation
 
 ```bash
 git clone <repository-url>
 cd "Untitled Theming pallete"
-bun install
-bun run db:push
+npm install
 ```
 
 ### Запуск
 
 ```bash
-bun run dev    # http://localhost:3000
-bun run build  # сборка + standalone-артефакты
-bun run start  # продакшен-сервер из .next/standalone
-```
-
-Штатный скрипт песочницы (Bash) запускает install, миграцию БД, dev-сервер и health-check:
-
-```bash
-bash .zscripts/dev.sh
+npm run dev    # http://localhost:3000
+npm run build  # продакшен-сборка
+npm start      # продакшен-сервер
 ```
 
 ### CHANGELOG.md
 
-`CHANGELOG.md` генерируется из conventional commits командой `bun run changelog`.
+`CHANGELOG.md` генерируется из conventional commits командой `npm run changelog`.
 Запускайте её перед пушем в `main`: CI проверяет свежесть файла на ветке `main` (джоба `changelog`).
 
 IDE: [docs/webstorm.md](docs/webstorm.md) (импорт code style, on save, анализ при коммите — **вручную**).
 
 ## Scripts
 
-| Команда                     | Описание                                  |
-| --------------------------- | ----------------------------------------- |
-| `bun run dev`               | Dev-сервер Next.js на порту 3000          |
-| `bun run build`             | Продакшен-сборка + копирование standalone |
-| `bun run start`             | Запуск standalone-сервера                 |
-| `bun run lint`              | ESLint                                    |
-| `bun run typecheck`         | TypeScript (`tsc --noEmit`)               |
-| `bun run lint:css`          | Stylelint                                 |
-| `bun run lint:md`           | markdownlint                              |
-| `bun run format`            | Prettier (запись)                         |
-| `bun run format:check`      | Prettier (проверка, как в CI)             |
-| `bun run check:file-length` | Проверка лимита 250 строк                 |
-| `bun run check:docs`        | Сверка доков с конфигами (шаблон)         |
-| `bun run test`              | Vitest                                    |
-| `bun run test:watch`        | Vitest (watch)                            |
-| `bun run test:coverage`     | Vitest + coverage                         |
-| `bun run db:push`           | Синхронизация схемы Prisma с SQLite       |
-| `bun run changelog`         | Генерация CHANGELOG.md из коммитов        |
+| Команда                     | Описание                           |
+| --------------------------- | ---------------------------------- |
+| `npm run dev`               | Dev-сервер Next.js на порту 3000   |
+| `npm run build`             | Продакшен-сборка                   |
+| `npm start`                 | Продакшен-сервер                   |
+| `npm run lint`              | ESLint                             |
+| `npm run typecheck`         | TypeScript (`tsc --noEmit`)        |
+| `npm run lint:css`          | Stylelint                          |
+| `npm run lint:md`           | markdownlint                       |
+| `npm run format`            | Prettier (запись)                  |
+| `npm run format:check`      | Prettier (проверка, как в CI)      |
+| `npm run check:file-length` | Проверка лимита 250 строк          |
+| `npm run check:docs`        | Сверка доков с конфигами (шаблон)  |
+| `npm test`                  | Vitest                             |
+| `npm run test:watch`        | Vitest (watch)                     |
+| `npm run test:coverage`     | Vitest + coverage                  |
+| `npm run changelog`         | Генерация CHANGELOG.md из коммитов |
 
 ## Docs
 
@@ -121,13 +112,12 @@ IDE: [docs/webstorm.md](docs/webstorm.md) (импорт code style, on save, а�
 
 ## Architecture
 
-- `src/app/` — маршруты Next.js (главная страница, layout, API-проверка).
+- `src/app/` — маршруты Next.js (главная страница и layout).
 - `src/components/showcase/` — секции шоукейса (шапка, hero, сетка палитр, ручная настройка,
   FAQ, футер) и хуки состояния.
 - `src/lib/palettes/` — данные палитр: типы, категории (brand/warm/cool/neutral), порядок вывода,
   CLI-хелпер и публичный API модуля.
-- `src/components/ui/` — вендорные компоненты shadcn/ui (обновляются через `shadcn add`).
-- `src/hooks/` — хуки `use-mobile` и `use-toast` (совместимость с shadcn).
+- `src/components/ui/` — компоненты shadcn/ui, которые использует проект.
 - `scripts/` — инструменты шаблона: проверка длины файлов, сверка доков, генерация changelog.
 
 ## Contributing
@@ -139,8 +129,8 @@ IDE: [docs/webstorm.md](docs/webstorm.md) (импорт code style, on save, а�
 ## Conventions
 
 Стиль кода: 2 пробела, точка с запятой, двойные кавычки, trailing commas,
-JSDoc для публичного API, `const`/`let`. Лимит файла — 250 строк (кроме вендорных
-компонентов `src/components/ui/**` и тестов). См. `.aiassistant/rules/AI Rules.md`.
+JSDoc для публичного API, `const`/`let`. Лимит файла — 250 строк (тесты исключены).
+См. `.aiassistant/rules/AI Rules.md`.
 
 ## License
 

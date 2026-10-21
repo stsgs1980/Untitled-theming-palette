@@ -46,7 +46,7 @@ function CodeBlock({
           Копировать
         </button>
       </div>
-      <pre className="scrollbar-thin max-h-96 overflow-y-auto p-4 font-mono text-xs leading-relaxed">
+      <pre className="max-h-96 scrollbar-thin overflow-y-auto p-4 font-mono text-xs leading-relaxed">
         <code>{code}</code>
       </pre>
     </div>

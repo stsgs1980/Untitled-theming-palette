@@ -3,7 +3,12 @@
 import { useTheme } from "next-themes";
 import { Toaster as Sonner, ToasterProps } from "sonner";
 
-const Toaster = ({ ...props }: ToasterProps) => {
+/**
+ * Контейнер уведомлений sonner, связанный с темой приложения.
+ * @param props - свойства toaster
+ * @returns элемент контейнера уведомлений
+ */
+const Toaster = ({ ...props }: ToasterProps): React.ReactElement => {
   const { theme = "system" } = useTheme();
 
   return (

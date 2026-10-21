@@ -9,11 +9,6 @@ const EXTENSIONS = /\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/;
 const TEST_FILE = /\.(test|spec)\.(ts|tsx|js|jsx|mts|cts|mjs|cjs)$/;
 /** Everything under tests/ or __tests__/ is test support code. */
 const TEST_DIR = /(?:^|[\\/])(?:__tests__|tests?)[\\/]/;
-/**
- * Vendored third-party code (shadcn/ui) is exempt: it is upstream code kept in sync
- * with the library, so splitting it here would only create merge conflicts.
- */
-const VENDOR_DIR = /(?:^|[\\/])src[\\/]components[\\/]ui[\\/]/;
 
 const args = process.argv.slice(2);
 const checkAll = args.includes("--all");
@@ -65,25 +60,14 @@ function isTestFile(file: string): boolean {
 }
 
 /**
- * Whether vendored third-party code is exempt from the anti-monolith limit.
- * @param file - repository-relative path
- * @returns true for files under src/components/ui/
- */
-function isVendorFile(file: string): boolean {
-  return VENDOR_DIR.test(file);
-}
-
-/**
  * Anti-monolith check: TS/JS source files must not exceed MAX_LINES.
- * Test files (*.test.*, *.spec.*, tests/, __tests__/) and vendored shadcn/ui
- * components are exempt.
+ * Test files (*.test.*, *.spec.*, tests/, __tests__/) are exempt.
  * @returns {void}
  */
 function main(): void {
   const candidates = listFiles();
-  const files = candidates.filter((file) => !isTestFile(file) && !isVendorFile(file));
-  const skippedTests = candidates.filter(isTestFile).length;
-  const skippedVendor = candidates.filter((file) => !isTestFile(file) && isVendorFile(file)).length;
+  const files = candidates.filter((file) => !isTestFile(file));
+  const skippedTests = candidates.length - files.length;
 
   let failed = 0;
 
@@ -108,7 +92,7 @@ function main(): void {
   }
 
   process.stdout.write(
-    `[OK] Checked files: ${files.length}, tests skipped: ${skippedTests}, vendor skipped: ${skippedVendor}. Limit: ${MAX_LINES} lines.\n`,
+    `[OK] Checked files: ${files.length}, tests skipped: ${skippedTests}. Limit: ${MAX_LINES} lines.\n`,
   );
 }
 

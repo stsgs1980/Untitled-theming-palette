@@ -32,6 +32,11 @@ const buttonVariants = cva(
   },
 );
 
+/**
+ * Кнопка с вариантами оформления и размеров.
+ * @param props - свойства button, вариант, размер и режим asChild
+ * @returns элемент кнопки
+ */
 function Button({
   className,
   variant,
@@ -41,7 +46,7 @@ function Button({
 }: React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean;
-  }) {
+  }): React.ReactElement {
   const Comp = asChild ? Slot : "button";
 
   return <Comp data-slot="button" className={cn(buttonVariants({ variant, size, className }))} {...props} />;

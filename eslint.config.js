@@ -41,10 +41,6 @@ export default [
       ".superpowers/**",
       // Next.js generated types.
       "next-env.d.ts",
-      // Standalone examples: not part of the app bundle, dependencies are optional.
-      "examples/**",
-      // Vendored shadcn/ui components: upstream code, not owned by this project.
-      "src/components/ui/**",
     ],
   },
   ...markdown.configs.recommended,

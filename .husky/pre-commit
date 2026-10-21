@@ -1,5 +1,5 @@
 # Формат и линтеры: сначала lint-staged, затем проверка длины файлов (anti-monolith)
-bunx lint-staged
+npx lint-staged
 
 # Проверка лимита длины файлов (anti-monolith)
 node scripts/check-file-length.ts

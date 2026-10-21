@@ -110,3 +110,39 @@ Stage Summary:
   работают (коммит 064e203), приложение собирается и запускается.
 - Ключевые отклонения от шаблона зафиксированы в docs/superpowers/plans/2026-10-21-webstorm-config-adaptation.md:
   Bun вместо npm, исключение src/components/ui/\*\* из лимита 250 строк, next/link вместо ссылки на главную.
+
+---
+
+Task ID: 4
+Agent: OpenCode
+Task: Отвязать проект от песочницы — удалить её артефакты, шаблонный балласт и перейти на npm.
+
+Work Log:
+
+- Решения владельца: полная чистка (песочница + мёртвый код + зависимости + обрезка shadcn), Prisma и БД
+  удаляются, пакетный менеджер — npm.
+- Анализ графа импортов от src/app: из 48 компонентов shadcn/ui достижимы 4 (badge, button, input, sonner);
+  реально импортируются next, react, react-dom, next-themes, lucide-react, sonner, clsx, tailwind-merge,
+  class-variance-authority и @radix-ui/react-slot.
+- Удалены артефакты песочницы: .zscripts/ (8 файлов), Caddyfile, download/, mini-services/, examples/,
+  tests/*.sh (3), prisma/, db/custom.db, .env с DATABASE_URL.
+- Удалён мёртвый код: src/hooks/use-toast.ts, src/hooks/use-mobile.ts, src/lib/db.ts, src/app/api/route.ts,
+  tailwind.config.ts (v3-конфиг, который Tailwind v4 не подхватывает), scripts/copy-standalone.ts.
+- Удалены 44 неиспользуемых компонента shadcn/ui; 4 оставшихся приведены к правилам шаблона
+  (JSDoc и явный тип возврата) — исключения вендора сняты и из ESLint, и из проверки длины файлов.
+- package.json: 11 зависимостей вместо 46; убраны Prisma, radix-компоненты кроме Slot, dnd-kit, react-query,
+  react-table, framer-motion, recharts, next-auth, next-intl, zod, zustand, uuid, vaul, cmdk, date-fns,
+  mdxeditor, z-ai-web-dev-sdk, sharp; скрипты build и start больше не строят standalone.
+- Переход на npm: удалён bun.lock, создан package-lock.json, хуки Husky переведены на npx и npm run,
+  CI — на setup-node с npm ci, README — на npm run.
+- Побочно: Next 16.4 сам генерирует AGENTS.md при next dev — файл закоммичен, чтобы дерево оставалось
+  чистым (Next пересоздаёт блок при каждом запуске dev).
+- Проверки: lint, typecheck, lint:css, lint:md, format:check, test (56 тестов), check:file-length,
+  check:docs — все exit 0; npm run build — exit 0; npm start и npm run dev — / = 200, CSS отдаётся.
+
+Stage Summary:
+
+- Проект больше не зависит от песочницы: удалено 87 файлов и 35 зависимостей, пакетный менеджер — npm,
+  конфигурация сборки упрощена до стандартной схемы next build и next start.
+- Шаблон webstorm-config применяется без единого исключения: лимит 250 строк действует для всех файлов,
+  включая компоненты shadcn/ui.

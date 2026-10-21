@@ -3,6 +3,10 @@
 Дата: 2026-10-21
 Источник требований: [stsgs1980/webstorm-config](https://github.com/stsgs1980/webstorm-config)
 
+> Решение про Bun в таблице ниже отменено планом
+> [2026-10-21-sandbox-decoupling-cleanup.md](2026-10-21-sandbox-decoupling-cleanup.md): после удаления
+> песочницной оркестрации проект переведён на npm.
+
 ## Цель
 
 Привести проект «Untitled Theming palette» к требованиям шаблона `webstorm-config`:

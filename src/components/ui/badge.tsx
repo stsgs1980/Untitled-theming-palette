@@ -22,12 +22,17 @@ const badgeVariants = cva(
   },
 );
 
+/**
+ * Бейдж с вариантами оформления.
+ * @param props - свойства span и вариант оформления
+ * @returns элемент бейджа
+ */
 function Badge({
   className,
   variant,
   asChild = false,
   ...props
-}: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants> & { asChild?: boolean }) {
+}: React.ComponentProps<"span"> & VariantProps<typeof badgeVariants> & { asChild?: boolean }): React.ReactElement {
   const Comp = asChild ? Slot : "span";
 
   return <Comp data-slot="badge" className={cn(badgeVariants({ variant }), className)} {...props} />;
