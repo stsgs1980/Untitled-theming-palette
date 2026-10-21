@@ -2,6 +2,7 @@
 
 import { execSync } from "node:child_process";
 import { existsSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 // A shallow clone hides most of git log, so the regenerated changelog would
 // silently drop old releases.
@@ -18,6 +19,8 @@ if (isShallowClone) {
 const CHANGELOG = "CHANGELOG.md";
 const DRAFT = `${CHANGELOG}.tmp`;
 const MARKDOWNLINT_DISABLE = "<!-- markdownlint-disable -->";
+// The preset loader imports the preset by path, so it must be an absolute file URL.
+const PRESET = pathToFileURL(fileURLToPath(new URL("./changelog-preset.mjs", import.meta.url))).href;
 
 const previous = existsSync(CHANGELOG) ? readFileSync(CHANGELOG, "utf8").replace(/\r\n/g, "\n") : "";
 
@@ -26,10 +29,18 @@ const previous = existsSync(CHANGELOG) ? readFileSync(CHANGELOG, "utf8").replace
 rmSync(DRAFT, { force: true });
 
 try {
-  execSync(`npx conventional-changelog -p angular -i ${DRAFT} -s`, { stdio: "inherit" });
+  // conventional-changelog v8 reads the current changelog and writes a draft with
+  // the new release in front of the old entries. The local preset opens the
+  // hidden-by-default types (chore, docs, refactor, test) so the release notes
+  // match the actual work of this repository.
+  execSync(`npx conventional-changelog -p "${PRESET}" -i ${CHANGELOG} -o ${DRAFT}`, { stdio: "inherit" });
 
-  // Convert asterisk to dash for consistency with prettier.
-  const generated = readFileSync(DRAFT, "utf8").replace(/^\* /gm, "- ");
+  // Convert asterisk to dash for consistency with prettier, and drop the marker of the
+  // previous revision: the marker is added back below, so keeping both would make every
+  // run change the file.
+  const generated = readFileSync(DRAFT, "utf8")
+    .replace(/^\* /gm, "- ")
+    .replace(/^<!-- markdownlint-disable -->\s*/, "");
   writeFileSync(DRAFT, `${MARKDOWNLINT_DISABLE}\n${generated}`);
 
   // The draft has no known extension, so the prettier parser is explicit.
