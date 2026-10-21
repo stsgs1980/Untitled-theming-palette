@@ -11,6 +11,9 @@ export default defineConfig({
     globals: true,
     environment: "node",
     passWithNoTests: true,
+    // Tooling tests spawn git and node subprocesses: on Windows a cold start or a
+    // busy disk pushes them past the default 5s timeout.
+    testTimeout: 30000,
     // Test files: src/**/*.test.ts(x) — tests of the project code.
     // tests/** — tooling tests shipped with the template itself.
     include: ["src/**/*.{test,spec}.{ts,tsx}", "tests/**/*.{test,spec}.{ts,tsx,mjs}"],
